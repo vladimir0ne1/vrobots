@@ -57,6 +57,11 @@ public class vrobot extends AdvancedRobot {
 		System.out.println("Relative (210) : " + Utils.normalAbsoluteAngleDegrees(-150));
 		System.out.println("Relative (210) : " + Utils.normalRelativeAngleDegrees(210));
 		System.out.println("Relative (330) : " + Utils.normalRelativeAngleDegrees(330));
+		System.out.println("sin 30: " + Math.sin(Math.PI/6));
+		System.out.println("sin 120: " + Math.sin(Math.PI/6 + Math.PI/2));
+		System.out.println("sin 210: " + Math.sin(Math.PI/6 + Math.PI));
+		System.out.println("sin 300: " + Math.sin(Math.PI/6 + 3*Math.PI));
+		
 		while(true) {			
 			turnRadarRightRadians(rt);
 
@@ -71,12 +76,39 @@ public class vrobot extends AdvancedRobot {
 			return bearing;
 	}
 	
+	public double getFutureEnemyX()
+	{
+		return 0;
+	}
+	
+	public double getFutureEnemyY()
+	{
+		return 0;
+	}
+	
+	public double getGunAdjustmentAngle(ScannedRobotEvent e)
+	{
+		double heading = e.getHeading();
+		//double 
+		return 0;
+	}
+	
 
 	/**
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	//@SuppressWarnings("deprecation")
 	public void onScannedRobot(ScannedRobotEvent e) {
+		
+		double myHeadingRadians = getHeadingRadians();
+		double distance = e.getDistance();
+		double newEnemyX = distance*Math.sin(myHeadingRadians);
+		
+		
+		
+		
+		
+		//e.
 		double enemyHeading = Utils.normalAbsoluteAngleDegrees(getHeading() + e.getBearing());
 		
 		double radarTurn = enemyHeading - getRadarHeading();
@@ -84,10 +116,9 @@ public class vrobot extends AdvancedRobot {
 		
 		System.out.println("enemyHeading: " + enemyHeading);
 		System.out.println("\nradarTurn: " + radarTurn);
-		setTurnRadarRight(radarTurn);
-		
+		setTurnRadarRight(radarTurn*2);
 		setTurnGunRight(gunTurn);
-		setAhead(5);
+		setAhead(20);
 		setTurnRight(100);
 		
 		fire(3);
