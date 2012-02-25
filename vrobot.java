@@ -50,10 +50,9 @@ public class vrobot extends AdvancedRobot {
 		System.out.println("h: " + normalHeading);
 		
 		System.out.println("New h: " +  normalHeading);
-		
-		//turnRight(normalHeading);
-		System.out.println("Heading: " + getHeading());		
-		//setTurnRight(0);
+
+		System.out.println("Heading: " + getHeading());	
+
 		System.out.println("sin30: " + Math.sin(30*(Math.PI/180)));
 		System.out.println("Relative (210) : " + Utils.normalAbsoluteAngleDegrees(-150));
 		System.out.println("Relative (210) : " + Utils.normalRelativeAngleDegrees(210));
@@ -81,77 +80,18 @@ public class vrobot extends AdvancedRobot {
 		double enemyHeading = Utils.normalAbsoluteAngleDegrees(getHeading() + e.getBearing());
 		
 		double radarTurn = enemyHeading - getRadarHeading();
-		//					+ getBearingWithSign(getHeading(), Utils.normalAbsoluteAngleDegrees(e.getBearing()))
-		//					- getRadarHeading();
-		//System.out.println("\n=== onScanned ====\nradarTurn " + radarTurn + "\ngetRadarHeading: " + getRadarHeading()
-		//			+ "\nUtils.normalAbsoluteAngleDegrees(e.getBearing())" + Utils.normalAbsoluteAngleDegrees(e.getBearing())
-		//			+ "\ngetHeading" + getHeading());
+		double gunTurn = enemyHeading - getGunHeading();
 		
 		System.out.println("enemyHeading: " + enemyHeading);
 		System.out.println("\nradarTurn: " + radarTurn);
 		setTurnRadarRight(radarTurn);
 		
+		setTurnGunRight(gunTurn);
 		setAhead(5);
 		setTurnRight(100);
-		//setAhead(-5);
-		//execute();
-		/*if (e.getBearing()!= -90)
-			{
-				System.out.println("e.Bearing: " + e.getBearing() + "\nHeading: " + getHeading() + "\nGunHeading " + getGunHeading());
-				
-							//getNormalHeading(getHeading(), getHeading() + getNormalBearing(e.getBearing()))
-				turnRight(e.getBearing() + 90);
-				turnGunRight(getHeading() - getGunHeading());
-			}
-		*/
-		
-		
-		
-		//ahead(50);
-		//setTurnLeft(50);
-		//turnRight(5);
-		//setTurnRadarRight(radarTurn*2);
-		//getRadar
 		
 		fire(3);
 		
-		
-		/*if (rt != 1)
-		{
-			double absBearing=e.getBearingRadians()+getHeadingRadians();
-			System.out.println("RadarHeading: " + getRadarHeading());
-			System.out.println("absBearing: " + absBearing);
-			double nra = Utils.normalRelativeAngle(absBearing - getRadarHeadingRadians())*2;
-			System.out.println("nra: " + nra);
-			//turnLeft(getHeading());
-			///setTurnRadarRight(getHeading() - getRadarHeading() + e.getBearing()+1);
-			setTurnRadarRightRadians(nra);
-			rt = 1;
-		}*/
-		
-		//setTurnGunRight(getGunHeading() - getRadarHeading());
-		//fire(3);
-		//fire(3);
-		//while(true)		
-		//{
-		//	fire(3);
-		//	scan();
-		//}
-		// Replace the next line with any behavior you would like
-		//setAdjustGunForRobotTurn(true);
-		//setAdjustRadarForGunTurn(true);
-		//setTurnRadarRight(getHeading() - getRadarHeading() + e.getBearing());
-		//setTurnGunRight(getRadarHeading());
-		//fire(2);
-		//turnRight(e.getBearing()-90);
-		//if (e.getDistance()>=50)
-		//	ahead(100);
-		//execute();
-		//scan();		
-	//	if (Turn == "left")
-	//		Turn = "right";
-	//	else
-	//		Turn = "left";
 	}
 
 	/**
