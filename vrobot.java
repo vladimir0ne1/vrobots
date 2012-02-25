@@ -61,6 +61,7 @@ public class vrobot extends AdvancedRobot {
 		System.out.println("sin 120: " + Math.sin(Math.PI/6 + Math.PI/2));
 		System.out.println("sin 210: " + Math.sin(Math.PI/6 + Math.PI));
 		System.out.println("sin 300: " + Math.sin(Math.PI/6 + 3*Math.PI));
+		System.out.println("arcsin 300: " + Math.asin(0.5));
 		
 		while(true) {			
 			turnRadarRightRadians(rt);
@@ -86,10 +87,11 @@ public class vrobot extends AdvancedRobot {
 		return 0;
 	}
 	
-	public double getGunAdjustmentAngle(ScannedRobotEvent e)
+	public double getGunAdjustmentAngle(ScannedRobotEvent e, double newEnemyX, double newEnemyY)
 	{
 		double heading = e.getHeading();
-		//double 
+		
+		
 		return 0;
 	}
 	
@@ -97,18 +99,37 @@ public class vrobot extends AdvancedRobot {
 	/**
 	 * onScannedRobot: What to do when you see another robot
 	 */
-	//@SuppressWarnings("deprecation")
+
 	public void onScannedRobot(ScannedRobotEvent e) {
+		
+		double BattleFieldHeight = getBattleFieldHeight();
+		double BattleFieldWidth = getBattleFieldWidth();
+		double BattleFieldDiagonal = Math.sqrt(Math.pow(BattleFieldHeight, 2) + Math.pow(BattleFieldWidth, 2));		
 		
 		double myHeadingRadians = getHeadingRadians();
 		double distance = e.getDistance();
-		double newEnemyX = distance*Math.sin(myHeadingRadians);
 		
+		double firePower = Math.min(400/distance, 3);		
 		
+		double bulletTime = distance/(20 - 3*firePower);
+		double enemyPath = bulletTime*e.getVelocity();
 		
+		double enemyX = distance*Math.sin(myHeadingRadians);
+		double enemyY = distance*Math.cos(myHeadingRadians);
 		
+		double newEnemyX = enemyPath*Math.sin(e.getHeadingRadians());
+		double newEnemyY = enemyPath*Math.cos(e.getHeadingRadians());
 		
-		//e.
+		double gunAdjustment = Math.asin(enemyPath/(2*distance))*2*180/Math.PI;
+		
+		System.out.println("BattleFieldDiagonal: " + BattleFieldDiagonal);
+		System.out.println("distance: " + distance);
+		System.out.println("firePower: " + firePower);
+		
+		System.out.println("bulletTime: " + bulletTime);
+		System.out.println("enemyPath: " + enemyPath);
+		System.out.println("gunAdjustment: " + gunAdjustment);		
+		
 		double enemyHeading = Utils.normalAbsoluteAngleDegrees(getHeading() + e.getBearing());
 		
 		double radarTurn = enemyHeading - getRadarHeading();
@@ -117,11 +138,11 @@ public class vrobot extends AdvancedRobot {
 		System.out.println("enemyHeading: " + enemyHeading);
 		System.out.println("\nradarTurn: " + radarTurn);
 		setTurnRadarRight(radarTurn*2);
-		setTurnGunRight(gunTurn);
-		setAhead(20);
-		setTurnRight(100);
+		setTurnGunRight(gunTurn + gunAdjustment);
+		//setAhead(6);
+		//setTurnRight(100);
 		
-		fire(3);
+		fire(firePower);
 		
 	}
 
@@ -130,7 +151,7 @@ public class vrobot extends AdvancedRobot {
 	 */
 	public void onHitByBullet(HitByBulletEvent e) {
 		// Replace the next line with any behavior you would like
-		back(10);
+		//back(10);
 	}
 	
 	/**
@@ -138,6 +159,6 @@ public class vrobot extends AdvancedRobot {
 	 */
 	public void onHitWall(HitWallEvent e) {
 		// Replace the next line with any behavior you would like
-		back(100);
+		//setAhead(100);
 	}	
 }
