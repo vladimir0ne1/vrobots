@@ -36,15 +36,15 @@ public class vrobot extends AdvancedRobot {
 		else
 			return  360 + b;
 	}
-	
+	private boolean isStart = true;
 	public void run() {
 		
 
-		setColors(Color.red,Color.blue,Color.green); // body,gun,radar
+		setColors(Color.gray,Color.black,Color.white); // body,gun,radar
 		setAdjustRadarForGunTurn(true);
 		setAdjustGunForRobotTurn(true);
 		setAdjustRadarForRobotTurn(true);
-		setMaxVelocity(8);
+		setMaxVelocity(5);
 		double normalHeading = getNormalHeading(getHeading(), 0);
 		System.out.println("Heading: " + getHeading());
 		System.out.println("h: " + normalHeading);
@@ -64,20 +64,21 @@ public class vrobot extends AdvancedRobot {
 		System.out.println("arcsin 300: " + Math.asin(0.5));
 		
 		while(true) {			
-			turnRadarRightRadians(rt);
+			turnRadarRightRadians(Double.POSITIVE_INFINITY);
 
 		}
 	}
 	
 
 	double dist = 100;
-	double degr = 0;
+	double degr = 360;
 	/**
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	double enemyEnergy = 100;
 
 	public void onScannedRobot(ScannedRobotEvent e) {		
+		
 		double absBearing=e.getBearingRadians()+getHeadingRadians();
 		
 		
@@ -89,7 +90,7 @@ public class vrobot extends AdvancedRobot {
 		double myHeadingRadians = getHeadingRadians();
 		double distance = e.getDistance();
 		
-		double firePower = Math.min(400/distance, 3);		
+		double firePower =  Math.min(500/distance, 3);		
 		
 		double bulletTime = distance/(20 - 3*firePower);
 		double enemyPath = bulletTime*e.getVelocity();
@@ -121,20 +122,28 @@ public class vrobot extends AdvancedRobot {
 		//setTurnRadarRight(radarTurn*2);
 		setTurnRadarRightRadians(Utils.normalRelativeAngle(
 				absBearing - getRadarHeadingRadians())*2);
-		//setTurnGunRight(gunTurn - gunAdjustment);
+		//setTurnGunRight(gunTurn + gunAdjustment);
 		setTurnGunRight(gunTurn);
-		turnRight(90+enemyHeading - getHeading());
-		//setTurnRight(90+enemyHeading - getHeading());
+		//turnRight(90+enemyHeading - getHeading());
 		
-		
-		if (enemyEnergy!= e.getEnergy())
+		if (isStart == true)
 		{
-		setAhead(-dist);
-		setTurnRight(-degr);
-		dist = -dist;
-		degr = -degr;
-		enemyEnergy = e.getEnergy();
+			turnRight(90 + e.getBearing());
+			isStart = false;
 		}
+		else
+			setTurnRight(90+e.getBearing()-15);
+		setAhead(dist);
+		//setTurnRight(10000);
+		
+		//if (enemyEnergy!= e.getEnergy())
+		//{
+		//setAhead(-dist);
+		//setTurnRight(-degr);
+		//dist = -dist;
+		//degr = -degr;
+		//enemyEnergy = e.getEnergy();
+		//}
 		
 		
 		//setTurnRight(degr);
@@ -145,24 +154,28 @@ public class vrobot extends AdvancedRobot {
 		//if ()
 		//setTurnRight(100);
 		
-		fire(firePower);
+		if (getGunHeat() == 0 && Math.abs(getGunTurnRemaining())<10)
+			setFire(firePower);
 		
 	}
 
 	/**
 	 * onHitByBullet: What to do when you're hit by a bullet
 	 */
-	//public void onHitByBullet(HitByBulletEvent e) {
+	public void onHitByBullet(HitByBulletEvent e) {
+		dist *= -1;
+		//setAhead(dist);
 	//	ahead(100);
 		// Replace the next line with any behavior you would like
 		//back(10);
-	//}
+	}
 	
 	/**
 	 * onHitWall: What to do when you hit a wall
 	 */
-	//public void onHitWall(HitWallEvent e) {
+	public void onHitWall(HitWallEvent e) {
+		dist = -dist;
 		// Replace the next line with any behavior you would like
 		//setAhead(100);
-	//}	
+	}	
 }
