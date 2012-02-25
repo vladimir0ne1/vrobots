@@ -55,6 +55,8 @@ public class vrobot extends AdvancedRobot {
 		System.out.println("Heading: " + getHeading());		
 		//setTurnRight(0);
 		System.out.println("sin30: " + Math.sin(30*(Math.PI/180)));
+		System.out.println("Absolute (-30) : " + Utils.normalAbsoluteAngleDegrees(-30));
+		//System.out.println("Relative (-30) : " + Utils.normalAbsoluteAngleDegrees(-30));
 		while(true) {			
 			turnRadarRightRadians(rt);
 
@@ -66,16 +68,32 @@ public class vrobot extends AdvancedRobot {
 	 */
 	//@SuppressWarnings("deprecation")
 	public void onScannedRobot(ScannedRobotEvent e) {
-		if (e.getBearingRadians()!= -90)
+		
+		double radarTurn =
+		        // Absolute bearing to target
+		        getHeadingRadians() + e.getBearingRadians()
+		        // Subtract current radar heading to get turn required
+		        - getRadarHeadingRadians();
+		System.out.println("e.RadarBearing: " + radarTurn + "\nabcdd: " + getRadarHeadingRadians());
+		double normalBearing=getNormalBearing(e.getBearing());
+		double normalNewRadarHeading = getNormalHeading(normalBearing, getHeading());
+		/*if (e.getBearing()!= -90)
 			{
-				System.out.println("e.Bearing: " + e.getBearing() + "\nHeading: " + getHeading());
-				turnGunRight(e.getBearing()-getGunHeading());
+				System.out.println("e.Bearing: " + e.getBearing() + "\nHeading: " + getHeading() + "\nGunHeading " + getGunHeading());
+				
 							//getNormalHeading(getHeading(), getHeading() + getNormalBearing(e.getBearing()))
 				turnRight(e.getBearing() + 90);
-				
+				turnGunRight(getHeading() - getGunHeading());
 			}
+		*/
 		
-		System.out.println("e.Bearing2: " + e.getBearing());
+		
+		
+		//ahead(50);
+		//setTurnLeft(50);
+		//turnRight(5);
+		setTurnRadarRight((normalNewRadarHeading - getRadarHeading())*2);
+		//getRadar
 		
 		fire(3);
 		
@@ -131,6 +149,6 @@ public class vrobot extends AdvancedRobot {
 	 */
 	public void onHitWall(HitWallEvent e) {
 		// Replace the next line with any behavior you would like
-		back(20);
+		back(300);
 	}	
 }
