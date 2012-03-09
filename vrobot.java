@@ -141,6 +141,7 @@ public class vrobot extends AdvancedRobot {
 	
 
 	double dist = 100;
+	double tempDist = 100;
 	double degr = 360;
 	int scannedX, scannedY;
 	double newEnemyX, newEnemyY;
@@ -148,6 +149,8 @@ public class vrobot extends AdvancedRobot {
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	double enemyEnergy = 100;
+	
+	int changedirection = 0;
 
 	public void onScannedRobot(ScannedRobotEvent e) {		
 		
@@ -178,22 +181,22 @@ public class vrobot extends AdvancedRobot {
 		
 		double gunAdjustment = Math.asin(enemyPath/(2*distance))*2*180/Math.PI;
 		
-		System.out.println("BattleFieldDiagonal: " + BattleFieldDiagonal);
+		/*System.out.println("BattleFieldDiagonal: " + BattleFieldDiagonal);
 		System.out.println("distance: " + distance);
 		System.out.println("firePower: " + firePower);
 		
 		System.out.println("bulletTime: " + bulletTime);
 		System.out.println("enemyPath: " + enemyPath);
 		System.out.println("gunAdjustment: " + gunAdjustment);		
-		
+		*/
 		double enemyHeading = Utils.normalAbsoluteAngleDegrees(getHeading() + e.getBearing());
 		
 		double radarTurn = enemyHeading - getRadarHeading();
 		double gunTurn = enemyHeading - getGunHeading();
 		
 		
-		System.out.println("enemyHeading: " + enemyHeading);
-		System.out.println("\nradarTurn: " + radarTurn);
+		//System.out.println("enemyHeading: " + enemyHeading);
+		//System.out.println("\nradarTurn: " + radarTurn);
 		//setTurnRadarRight(radarTurn*2);
 		setTurnRadarRightRadians(Utils.normalRelativeAngle(
 				absBearing - getRadarHeadingRadians())*2);
@@ -259,20 +262,38 @@ public class vrobot extends AdvancedRobot {
 		}
 		else
 			setTurnRight(90+e.getBearing()-15);
-		setAhead(dist);
+		//setAhead(dist);
 		
 		
-		if (enemyEnergy!= e.getEnergy())
+		if (enemyEnergy != e.getEnergy())
 		//{
 		//	ahead(100);
 			
 		//}
 		{
-		setAhead(-dist);
-		setTurnRight(-degr);
-		dist = -dist;
-		degr = -degr;
-		enemyEnergy = e.getEnergy();
+			if (changedirection == 2)
+			{
+				setAhead(dist);
+				//dist = tempDist;
+				System.out.println("Change");
+				//setAhead(-dist);			
+				//setTurnRight(-degr);
+				//dist = -dist;
+				//degr = -degr;
+				enemyEnergy = e.getEnergy();
+				this.changedirection = 0;
+			}
+			else
+			{
+				if (changedirection == 0)
+					setAhead(dist);
+				//tempDist = dist;
+				//dist = 0;
+				enemyEnergy = e.getEnergy();
+				System.out.println("No change");
+				//setAhead(dist);
+				this.changedirection++;
+			}
 		}
 		
 		if (getGunHeat() == 0 && Math.abs(getGunTurnRemaining())<10)
@@ -295,7 +316,8 @@ public class vrobot extends AdvancedRobot {
 	 * onHitByBullet: What to do when you're hit by a bullet
 	 */
 	public void onHitByBullet(HitByBulletEvent e) {
-		dist *= -1;
+		//setAhead(dist);
+		//dist *= -1;
 	}
 	
 	/**
@@ -303,5 +325,7 @@ public class vrobot extends AdvancedRobot {
 	 */
 	public void onHitWall(HitWallEvent e) {
 		dist = -dist;
+		setAhead(dist);
+		
 	}	
 }
