@@ -1,7 +1,9 @@
+//== move round with GaussFactor Targeling ==//
+
 newX = distance*sin(heading);
 newY = distance*cos(heading);
 
-//====
+//==== ??==
 
-double enemyHeading = Utils.normalAbsoluteAngleDegrees(getHeading() + e.getBearing());
+double enemyHeading = Utils.normalAbsoluteAngleDegrees(getHeading() + e.getBearing());	
 double radarTurn = enemyHeading - getRadarHeading();
