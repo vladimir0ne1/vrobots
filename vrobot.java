@@ -154,8 +154,7 @@ public class vrobot extends AdvancedRobot {
 
 	public void onScannedRobot(ScannedRobotEvent e) {		
 		
-		
-		
+				
 		double absBearing=e.getBearingRadians()+getHeadingRadians();
 		double BattleFieldHeight = getBattleFieldHeight();
 		double BattleFieldWidth = getBattleFieldWidth();
@@ -274,6 +273,7 @@ public class vrobot extends AdvancedRobot {
 			if (changedirection == 2)
 			{
 				setAhead(dist);
+				//setAhead(e.getDistance()/2);
 				//dist = tempDist;
 				System.out.println("Change");
 				//setAhead(-dist);			
@@ -286,6 +286,7 @@ public class vrobot extends AdvancedRobot {
 			else
 			{
 				if (changedirection == 0)
+					//setAhead(e.getDistance()/2);
 					setAhead(dist);
 				//tempDist = dist;
 				//dist = 0;
