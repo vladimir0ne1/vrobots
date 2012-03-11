@@ -25,6 +25,7 @@ import robocode.util.Utils;
  
 class WaveBullet
 {
+	//123
 	private double startX, startY, startBearing, power;
 	private long   fireTime;
 	private int    direction;
