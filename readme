@@ -1,5 +1,7 @@
 //== move round with GaussFactor Targeling ==//
 
+
+// my help info
 newX = distance*sin(heading);
 newY = distance*cos(heading);
 
