@@ -6,9 +6,29 @@ import robocode.util.Utils;
 
 class WaveBullet
 {
-	private double startX, startY, startBearing, power;
+	/**
+	 * Начальные координаты
+	 */
+	private double	startX, startY;
+	/**
+	 * Исходное направление на цель
+	 */
+	private double startBearing;
+	/**
+	 * Мощность выстрела
+	 */
+	private double power;
+	/**
+	 * Время выстрела
+	 */
 	private long   fireTime;
+	/** Направление движения.
+	 * По часовой (1) или против часовой (-1)
+	 */
 	private int    direction;
+	/** Массив индексов.
+	 * (наибольший индекс соответствует наилучшему GaussFactor)
+	 */
 	private int[]  returnSegment;
  
 	/**
@@ -45,13 +65,7 @@ class WaveBullet
 	}
  
 	/** Вычисление максимальный угла отклонения цели.
-	 * 
-	 * @return Math.asin(8 / getBulletSpeed());
-	 */
-	public double maxEscapeAngle()
-	{
-		/** Рассчитывает максимальный угол отклонения цели.
-		 * Треугольник. Стреляем из точки А в точку С.
+	 * Треугольник. Стреляем из точки А в точку С.
 		 *	b = D (расстояние между нашим роботом и роботом врага)
 		 * c = Vb * t (Vb - скорость пули)
 		 * a = Vr * t (Vr скорость вражеского робота)
@@ -59,8 +73,12 @@ class WaveBullet
 		 * sin(c) в худшем случае равен 1
 		 * Максимальная скорость робота равна 8
 		 * Получаем: A = asin(8/vb)
-		 * 
-		 */
+		 
+	 * @return Math.asin(8 / getBulletSpeed());
+	 */
+	public double maxEscapeAngle()
+	{
+		
 		return Math.asin(8 / getBulletSpeed());
 	}
 	

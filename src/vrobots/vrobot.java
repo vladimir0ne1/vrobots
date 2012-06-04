@@ -15,12 +15,31 @@ import robocode.util.Utils;
  */
 public class vrobot extends AdvancedRobot {
 
+	/** Массив данных о выстрелах.
+	 * Откуда стреляли
+	 * Направление движения
+	 * Исходные координаты врага 
+	 * Время выстрела и т.п.
+	 */
 	List<WaveBullet> waves = new ArrayList<WaveBullet>();
-	static int[] stats = new int[31]; // 31 - число уникальных GaussFactor's
+	/**Массив уникальных GaussFactor's.
+	 * 31 - число уникальных GaussFactor's
+	 * Число элементов - нечетное
+	 * GuessFactor = 0 в середине
+	 */
+	static int[] stats = new int[31]; 
 	  // Число элементов - нечетное
 	  // GuessFactor 0 в середине
+	/** Направление движения врага.
+	 * (-1) - против часовой стрелки.
+	 * (1) - по часовой стрелке.
+	 */
 	int direction = 1;
 	
+	/** Только начался раунд.
+	 * true - да
+	 * false - нет
+	 */
 	private boolean isStart = true;
 	/** Точка входа.
 	 * 
@@ -37,17 +56,25 @@ public class vrobot extends AdvancedRobot {
 
 		while(true) {			
 			turnRadarRightRadians(Double.POSITIVE_INFINITY);
-
 		}
 	}
-
-	// Расстояние, на которое нужно отъехать.
+	/** Расстояние, на которое нужно отъехать.
+	 * 
+	 */
 	double dist = 100;
-	// Угол, на который нужно довернуться
+	/** Угол, на который нужно довернуться.
+	 * 
+	 */
 	double degr = 360;
-	// Изначально энергия противника равна 100 (будет изменяться при выстреле)
+	/** Изначально энергия противника равна 100 (будет изменяться при выстреле)
+	 * 
+	 */
 	double enemyEnergy = 100;
-	// Меняем направление движения
+	/** Изменить направление движения или остановиться.
+	 * 2 - изменить направление
+	 * 1 - остановиться
+	 * 0 - продолжить движени в данном направлении
+	 */
 	int changedirection = 0;
 	/**
 	 * Событие: засекли вражеского робота
@@ -124,6 +151,7 @@ public class vrobot extends AdvancedRobot {
                 
 //========================= Движение =====================================================
 
+        //dist = Math.max(60, e.getDistance()/4);
         // Если бой только начался
 		if (isStart == true)
 		{
@@ -146,7 +174,7 @@ public class vrobot extends AdvancedRobot {
 				System.out.println("Change");
 				//setAhead(-dist);			
 				//setTurnRight(-degr);
-				//dist = -dist;
+				dist = -dist;
 				//degr = -degr;
 				// Зафиксировать новое состояние вражеского робота
 				enemyEnergy = e.getEnergy();
@@ -168,13 +196,15 @@ public class vrobot extends AdvancedRobot {
 		if (getGunHeat() == 0 && Math.abs(getGunTurnRemaining())<10)
 			setFire(firePower);
 	}
-
 	/**
 	 * Событие: В нас попали.
 	 */
 	public void onHitByBullet(HitByBulletEvent e) {
+		//dist = Math.random()*50+80;
+		//dist = 200;
+		//dist = -dist;
 		//setAhead(dist);
-		//dist *= -1;
+		//dist = 100;		
 	}
 	/**
 	 * Событие: врезались в стену
@@ -182,8 +212,8 @@ public class vrobot extends AdvancedRobot {
 	public void onHitWall(HitWallEvent e) {
 		// Поменять направление на противоположное
 		dist = -dist;
+		//this.changedirection = 0;
 		// Проехать на расстояние dist
 		setAhead(dist);
-
 	}	
 }
