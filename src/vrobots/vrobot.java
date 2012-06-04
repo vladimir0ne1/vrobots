@@ -23,64 +23,6 @@ import java.util.Random;
 
 import robocode.util.Utils;
 
-import robocode.*;
-import robocode.util.Utils;
-import java.awt.geom.*;     // for Point2D's
-import java.util.ArrayList; // for collection of waves
-
-
-
- 
-class WaveBullet
-{
-	//123
-	private double startX, startY, startBearing, power;
-	private long   fireTime;
-	private int    direction;
-	private int[]  returnSegment;
- 
-	public WaveBullet(double x, double y, double bearing, double power,
-			int direction, long time, int[] segment)
-	{
-		startX         = x;
-		startY         = y;
-		startBearing   = bearing;
-		this.power     = power;
-		this.direction = direction;
-		fireTime       = time;
-		returnSegment  = segment;
-	}
-	
-	public double getBulletSpeed()
-	{
-		return 20 - power * 3;
-	}
- 
-	public double maxEscapeAngle()
-	{
-		return Math.asin(8 / getBulletSpeed());
-	}
-	
-	public boolean checkHit(double enemyX, double enemyY, long currentTime)
-	{
-		// if the distance from the wave origin to our enemy has passed
-		// the distance the bullet would have traveled...
-		if (Point2D.distance(startX, startY, enemyX, enemyY) <= 
-				(currentTime - fireTime) * getBulletSpeed())
-		{
-			double desiredDirection = Math.atan2(enemyX - startX, enemyY - startY);
-			double angleOffset = Utils.normalRelativeAngle(desiredDirection - startBearing);
-			double guessFactor =
-				Math.max(-1, Math.min(1, angleOffset / maxEscapeAngle())) * direction;
-			int index = (int) Math.round((returnSegment.length - 1) /2 * (guessFactor + 1));
-			returnSegment[index]++;
-			return true;
-		}
-		return false;
-	}
-} // end WaveBullet class
-
-
 public class vrobot extends AdvancedRobot {
 	
 	List<WaveBullet> waves = new ArrayList<WaveBullet>();
