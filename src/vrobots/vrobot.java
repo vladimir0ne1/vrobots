@@ -5,7 +5,6 @@ package vrobots;
 
 import robocode.*;
 
-import java.awt.Color;
 import java.util.List;
 import java.util.ArrayList;
 import robocode.util.Utils;
@@ -22,7 +21,8 @@ public class vrobot extends AdvancedRobot {
 	 * Время выстрела и т.п.
 	 */
 	List<WaveBullet> waves = new ArrayList<WaveBullet>();
-	/**Массив уникальных GaussFactor's.
+	
+	/** Массив уникальных GaussFactor's.
 	 * 31 - число уникальных GaussFactor's
 	 * Число элементов - нечетное
 	 * GuessFactor = 0 в середине
@@ -34,19 +34,14 @@ public class vrobot extends AdvancedRobot {
 	 * (-1) - против часовой стрелки.
 	 * (1) - по часовой стрелке.
 	 */
-	int direction = 1;
+	int direction = 1;	
 	
-	/** Только начался раунд.
-	 * true - да
-	 * false - нет
-	 */
-	private boolean isStart = true;
 	/** Точка входа.
 	 * 
 	 */
 	public void run() {
 
-		setColors(Color.gray,Color.black,Color.white); // Корпус, пушка, радар
+		//setColors(Color.gray,Color.black,Color.white); // Корпус, пушка, радар
 		// Делаем все части независимыми друг от друга (вращаются независимо)
 		setAdjustRadarForGunTurn(true); 
 		setAdjustGunForRobotTurn(true);
@@ -76,6 +71,7 @@ public class vrobot extends AdvancedRobot {
 	 * 0 - продолжить движени в данном направлении
 	 */
 	int changedirection = 0;
+	
 	/**
 	 * Событие: засекли вражеского робота
 	 */
@@ -86,9 +82,6 @@ public class vrobot extends AdvancedRobot {
 	
 		// Расстояние до врага
 		double distance = e.getDistance();
-
-		// Мощность заряда
-		double firePower =  Math.min(500/distance, 3);		
 		
 		// Захват врага на радаре
 		setTurnRadarRightRadians(Utils.normalRelativeAngle(
@@ -150,33 +143,20 @@ public class vrobot extends AdvancedRobot {
                     waves.add(newWave);
                 
 //========================= Движение =====================================================
-
-        //dist = Math.max(60, e.getDistance()/4);
-        // Если бой только начался
-		if (isStart == true)
-		{
-			// Развернуться к противнику на 90 градусов
-			turnRight(90 + e.getBearing());
-			isStart = false;
-		}
-		else // Довернуться на 15 градусов
-			setTurnRight(90+e.getBearing()-15);
-		//setAhead(dist);
-
+       
+        // Развернуться к противнику на 90 градусов
+			//setTurnRight(90+e.getBearing());
+                setTurnRight(Math.random()*360);
+                
+		dist = Math.random()*100 + 50;
 		// Если враг произвел выстрел
 		if (enemyEnergy != e.getEnergy())
 		{
 			if (changedirection == 2)
 			{
-				// Проехать вперед на расстояние dist
 				setAhead(dist);
-				//dist = tempDist;
-				System.out.println("Change");
-				//setAhead(-dist);			
-				//setTurnRight(-degr);
-				dist = -dist;
-				//degr = -degr;
-				// Зафиксировать новое состояние вражеского робота
+				//setAhead(-dist);	
+				//dist = -dist;
 				enemyEnergy = e.getEnergy();
 				this.changedirection = 0;
 			}
@@ -185,21 +165,20 @@ public class vrobot extends AdvancedRobot {
 				if (changedirection == 0)
 					setAhead(dist);
 				//tempDist = dist;
-				//dist = 0;
 				enemyEnergy = e.getEnergy();
-				System.out.println("No change");
 				//setAhead(dist);
 				this.changedirection++;
 			}
 		}
 		// Если пушка еще не довернулась, то задержать стрельбу
-		if (getGunHeat() == 0 && Math.abs(getGunTurnRemaining())<10)
-			setFire(firePower);
+		//if (getGunHeat() == 0 && Math.abs(getGunTurnRemaining())<10)
+			setFire(power);
 	}
 	/**
 	 * Событие: В нас попали.
 	 */
 	public void onHitByBullet(HitByBulletEvent e) {
+		//setAhead(250);
 		//dist = Math.random()*50+80;
 		//dist = 200;
 		//dist = -dist;
